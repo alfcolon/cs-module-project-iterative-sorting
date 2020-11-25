@@ -1,25 +1,42 @@
 # TO-DO: Complete the selection_sort() function below
 def selection_sort(arr):
-    # loop through n-1 elements
-    for i in range(0, len(arr) - 1):
-        cur_index = i
-        smallest_index = cur_index
-        # TO-DO: find next smallest element
-        # (hint, can do in 3 loc)
-        # Your code here
-
-
-        # TO-DO: swap
-        # Your code here
-
+    arrLen = len(arr)
+    
+    index = 0
+    while index < arrLen - 1:
+        num1 = arr[index]
+        
+        search_index = index + 1
+        while search_index < arrLen:
+            num2 = arr[search_index]
+            if num2 < num1:
+                num1 += num2
+                num2 = num1 - num2
+                num1 -= num2
+                arr[index] = num1
+                arr[search_index] = num2
+            search_index += 1
+        index += 1
     return arr
 
 
 # TO-DO:  implement the Bubble Sort function below
 def bubble_sort(arr):
-    # Your code here
+    arr_len = len(arr)
 
-
+    index1 = 0
+    while index1 < arr_len - 1:
+        index2 = 0
+        while index2 < arr_len - index1 - 1:
+            current_num = arr[index2]
+            next_num = arr[index2 + 1]
+            if current_num > next_num:
+                # swap
+                arr[index2] += arr[index2 + 1]
+                arr[index2 + 1] = arr[index2] - arr[index2 + 1]
+                arr[index2] -= arr[index2 + 1]
+            index2 += 1
+        index1 += 1
     return arr
 
 '''
@@ -40,7 +57,39 @@ buckets.
 What is the time and space complexity of the counting sort algorithm?
 '''
 def counting_sort(arr, maximum=None):
-    # Your code here
+    if arr == []:
+        return []
+    # Get min and max
+    maxValue = int(max(arr))
+    minValue = int(min(arr))
+    range_of_elements = maxValue - minValue + 1
+    arrLen = len(arr)
 
+    # Create a sieve-like array and output array
+    count_arr = [0] * range_of_elements
+    output_arr = [0] * arrLen
 
-    return arr
+#    # Store count of each character
+    index = 0
+    while index < arrLen:
+        elementPosition = arr[index] - minValue
+        count_arr[elementPosition] += 1
+        index += 1
+
+    # Loop through count array so that count_arr[i] "now contains actial position of this element in output array
+    index = 1
+    while index < len(count_arr):
+        count_arr[index] += count_arr[index - 1]
+        index += 1
+
+    # Build the output array
+    index = arrLen - 1
+    while index >= 0:
+        count_arr_index = arr[index] - minValue
+        count_arr_value = count_arr[count_arr_index]
+        output_arr_index = count_arr_value - 1
+        output_arr[output_arr_index] = arr[index]
+        count_arr[arr[index] - minValue] -= 1
+        index -= 1
+
+    return output_arr
